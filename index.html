@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hackathon Team Registration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #020f48 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+
+        .member-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border: 2px dashed #dee2e6;
+            transition: all 0.3s ease;
+        }
+
+        .member-section.active {
+            border-color: #667eea;
+            background: #f0f2ff;
+        }
+
+        .member-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .member-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .add-member-btn, .remove-member-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .add-member-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .add-member-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .remove-member-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .remove-member-btn:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .team-info {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid #2196f3;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+            display: none;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #f5c6cb;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            .member-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ERROR 404</h1>
+            <p>Join the ultimate coding challenge and showcase your innovation!</p>
+        </div>
+
+        <div class="form-container">
+            <div class="team-info">
+                <h3>📋 Registration Guidelines</h3>
+                <ul style="margin-top: 10px; padding-left: 20px;">
+                    <li>Team size: Minimum 2 members, Maximum 3 members</li>
+                    <li>All fields are mandatory</li>
+                    <li>Leader details will be used for primary communication</li>
+                </ul>
+            </div>
+
+            <div class="success-message" id="successMessage">
+                ✅ Team registered successfully! Good luck with your hackathon journey!
+            </div>
+
+            <div class="error-message" id="errorMessage">
+                ❌ Registration failed. Please try again.
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Registering your team...</p>
+            </div>
+
+            <form id="registrationForm">
+                <!-- Team Information -->
+                <div class="form-group">
+                    <label for="teamName">🏆 Team Name *</label>
+                    <input type="text" id="teamName" name="teamName" required placeholder="Enter your awesome team name">
+                </div>
+
+                <!-- Leader Information -->
+                <div class="member-section active">
+                    <div class="member-header">
+                        <div class="member-title">👑 Team Leader</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="leaderName">Full Name *</label>
+                        <input type="text" id="leaderName" name="leaderName" required placeholder="Leader's full name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="leaderSemester">Semester *</label>
+                        <select id="leaderSemester" name="leaderSemester" required>
+                            <option value="">Select Semester</option>
+                            <option value="1">1st Semester</option>
+                            <option value="2">2nd Semester</option>
+                            <option value="3">3rd Semester</option>
+                            <option value="4">4th Semester</option>
+                            <option value="5">5th Semester</option>
+                            <option value="6">6th Semester</option>
+                            <option value="7">7th Semester</option>
+                            <option value="8">8th Semester</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="leaderDepartment">Department *</label>
+                        <select id="leaderDepartment" name="leaderDepartment" required>
+                            <option value="">Select Department</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="AI">Computer Science (AI)</option>
+                            <option value="Electronics">Electronics & Communication</option>
+                            <option value="Electrical">Electrical & Electronics</option>
+                            <option value="Mechanical">Mechanical Engineering</option>
+                            <option value="Civil">Civil Engineering</option>
+                             <option value="MBA">MBA</option>
+                            <option value="Other">OTHERS</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="leaderEmail">Email Address *</label>
+                        <input type="email" id="leaderEmail" name="leaderEmail" required placeholder="leader@example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="leaderMobile">Mobile Number *</label>
+                        <input type="tel" id="leaderMobile" name="leaderMobile" required placeholder="10-digit mobile number" pattern="[0-9]{10}">
+                    </div>
+                </div>
+
+                <!-- Member 2 -->
+                <div class="member-section" id="member2Section">
+                    <div class="member-header">
+                        <div class="member-title">👤 Member 2</div>
+                        <button type="button" class="remove-member-btn" onclick="removeMember(2)">Remove Member</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="member2Name">Full Name *</label>
+                        <input type="text" id="member2Name" name="member2Name" required placeholder="Member 2 full name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="member2Semester">Semester *</label>
+                        <select id="member2Semester" name="member2Semester" required>
+                            <option value="">Select Semester</option>
+                            <option value="1">1st Semester</option>
+                            <option value="2">2nd Semester</option>
+                            <option value="3">3rd Semester</option>
+                            <option value="4">4th Semester</option>
+                            <option value="5">5th Semester</option>
+                            <option value="6">6th Semester</option>
+                            <option value="7">7th Semester</option>
+                            <option value="8">8th Semester</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="member2Department">Department *</label>
+                        <select id="member2Department" name="member2Department" required>
+                            <option value="">Select Department</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="AI">Computer Science (AI)</option>
+                            <option value="Electronics">Electronics & Communication</option>
+                            <option value="Electrical">Electrical & Electronics</option>
+                            <option value="Mechanical">Mechanical Engineering</option>
+                            <option value="Civil">Civil Engineering</option>
+                             <option value="MBA">MBA</option>
+                            <option value="Other">OTHERS</option>
+                            
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="member2Email">Email Address *</label>
+                        <input type="email" id="member2Email" name="member2Email" required placeholder="member2@example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="member2Mobile">Mobile Number *</label>
+                        <input type="tel" id="member2Mobile" name="member2Mobile" required placeholder="10-digit mobile number" pattern="[0-9]{10}">
+                    </div>
+                </div>
+
+                <!-- Member 3 (Hidden by default) -->
+                <div class="member-section" id="member3Section" style="display: none;">
+                    <div class="member-header">
+                        <div class="member-title">👤 Member 3</div>
+                        <button type="button" class="remove-member-btn" onclick="removeMember(3)">Remove Member</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="member3Name">Full Name</label>
+                        <input type="text" id="member3Name" name="member3Name" placeholder="Member 3 full name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="member3Semester">Semester</label>
+                        <select id="member3Semester" name="member3Semester">
+                            <option value="">Select Semester</option>
+                            <option value="1">1st Semester</option>
+                            <option value="2">2nd Semester</option>
+                            <option value="3">3rd Semester</option>
+                            <option value="4">4th Semester</option>
+                            <option value="5">5th Semester</option>
+                            <option value="6">6th Semester</option>
+                            <option value="7">7th Semester</option>
+                            <option value="8">8th Semester</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="member3Department">Department</label>
+                        <select id="member3Department" name="member3Department">
+                             <option value="">Select Department</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="AI">Computer Science (AI)</option>
+                            <option value="Electronics">Electronics & Communication</option>
+                            <option value="Electrical">Electrical & Electronics</option>
+                            <option value="Mechanical">Mechanical Engineering</option>
+                            <option value="Civil">Civil Engineering</option>
+                             <option value="MBA">MBA</option>
+                            <option value="Other">OTHERS</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="member3Email">Email Address</label>
+                        <input type="email" id="member3Email" name="member3Email" placeholder="member3@example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="member3Mobile">Mobile Number</label>
+                        <input type="tel" id="member3Mobile" name="member3Mobile" placeholder="10-digit mobile number" pattern="[0-9]{10}">
+                    </div>
+                </div>
+
+                <!-- Add Member Button -->
+                <div style="text-align: center; margin: 20px 0;" id="addMemberContainer">
+                    <button type="button" class="add-member-btn" onclick="addMember()">+ Add Third Member</button>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    🚀 Register Team
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-app-compat.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-database-compat.min.js"></script>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "your-api-key-here",
+            authDomain: "your-project.firebaseapp.com",
+            databaseURL: "https://your-project-default-rtdb.firebaseio.com",
+            projectId: "your-project-id",
+            storageBucket: "your-project.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "your-app-id"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        let memberCount = 2; // Leader + 1 member (minimum)
+
+        function addMember() {
+            if (memberCount < 3) {
+                const member3Section = document.getElementById('member3Section');
+                member3Section.style.display = 'block';
+                member3Section.classList.add('active');
+                
+                // Make member 3 fields required
+                const member3Fields = member3Section.querySelectorAll('input, select');
+                member3Fields.forEach(field => {
+                    if (field.name.startsWith('member3')) {
+                        field.required = true;
+                    }
+                });
+
+                document.getElementById('addMemberContainer').style.display = 'none';
+                memberCount = 3;
+            }
+        }
+
+        function removeMember(memberNum) {
+            if (memberNum === 2 && memberCount === 2) {
+                alert('Team must have at least 2 members (including leader)');
+                return;
+            }
+
+            if (memberNum === 2) {
+                // If removing member 2 and member 3 exists, move member 3 data to member 2
+                const member3Section = document.getElementById('member3Section');
+                const member2Section = document.getElementById('member2Section');
+                
+                if (member3Section.style.display !== 'none') {
+                    // Copy member 3 data to member 2
+                    document.getElementById('member2Name').value = document.getElementById('member3Name').value;
+                    document.getElementById('member2Semester').value = document.getElementById('member3Semester').value;
+                    document.getElementById('member2Department').value = document.getElementById('member2Department').value;
+                    document.getElementById('member2Email').value = document.getElementById('member3Email').value;
+                    document.getElementById('member2Mobile').value = document.getElementById('member3Mobile').value;
+                    
+                    // Clear member 3
+                    clearMemberData(3);
+                    member3Section.style.display = 'none';
+                    member3Section.classList.remove('active');
+                    document.getElementById('addMemberContainer').style.display = 'block';
+                }
+                memberCount = 2;
+            } else if (memberNum === 3) {
+                clearMemberData(3);
+                const member3Section = document.getElementById('member3Section');
+                member3Section.style.display = 'none';
+                member3Section.classList.remove('active');
+                
+                // Make member 3 fields not required
+                const member3Fields = member3Section.querySelectorAll('input, select');
+                member3Fields.forEach(field => {
+                    field.required = false;
+                });
+
+                document.getElementById('addMemberContainer').style.display = 'block';
+                memberCount = 2;
+            }
+        }
+
+        function clearMemberData(memberNum) {
+            document.getElementById(`member${memberNum}Name`).value = '';
+            document.getElementById(`member${memberNum}Semester`).value = '';
+            document.getElementById(`member${memberNum}Department`).value = '';
+            document.getElementById(`member${memberNum}Email`).value = '';
+            document.getElementById(`member${memberNum}Mobile`).value = '';
+        }
+
+        document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const loading = document.getElementById('loading');
+            const submitBtn = document.getElementById('submitBtn');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            // Hide previous messages
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+            
+            // Show loading
+            loading.style.display = 'block';
+            submitBtn.disabled = true;
+
+            try {
+                const formData = new FormData(this);
+                const teamData = {
+                    teamName: formData.get('teamName'),
+                    registrationTime: new Date().toISOString(),
+                    status: 'registered',
+                    currentPitch: null,
+                    isPresenting: false,
+                    isCompleted: false,
+                    leader: {
+                        name: formData.get('leaderName'),
+                        semester: formData.get('leaderSemester'),
+                        department: formData.get('leaderDepartment'),
+                        email: formData.get('leaderEmail'),
+                        mobile: formData.get('leaderMobile'),
+                        role: 'leader'
+                    },
+                    members: []
+                };
+
+                // Add member 2 (always present)
+                if (formData.get('member2Name')) {
+                    teamData.members.push({
+                        name: formData.get('member2Name'),
+                        semester: formData.get('member2Semester'),
+                        department: formData.get('member2Department'),
+                        email: formData.get('member2Email'),
+                        mobile: formData.get('member2Mobile'),
+                        role: 'member'
+                    });
+                }
+
+                // Add member 3 (if present)
+                if (formData.get('member3Name') && memberCount === 3) {
+                    teamData.members.push({
+                        name: formData.get('member3Name'),
+                        semester: formData.get('member3Semester'),
+                        department: formData.get('member3Department'),
+                        email: formData.get('member3Email'),
+                        mobile: formData.get('member3Mobile'),
+                        role: 'member'
+                    });
+                }
+
+                // Generate unique team ID
+                const teamId = 'team_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                
+                // Save to Firebase
+                await database.ref('teams/' + teamId).set(teamData);
+                
+                // Show success message
+                loading.style.display = 'none';
+                successMessage.style.display = 'block';
+                
+                // Reset form
+                this.reset();
+                
+                // Reset member count and sections
+                memberCount = 2;
+                document.getElementById('member3Section').style.display = 'none';
+                document.getElementById('addMemberContainer').style.display = 'block';
+                
+                // Scroll to success message
+                successMessage.scrollIntoView({ behavior: 'smooth' });
+                
+            } catch (error) {
+                console.error('Registration error:', error);
+                loading.style.display = 'none';
+                errorMessage.style.display = 'block';
+                errorMessage.textContent = '❌ Registration failed: ' + error.message;
+            } finally {
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Form validation for mobile numbers
+        document.addEventListener('input', function(e) {
+            if (e.target.type === 'tel') {
+                e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
+            }
+        });
+
+        // Real-time email validation
+        document.addEventListener('blur', function(e) {
+            if (e.target.type === 'email') {
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (e.target.value && !emailPattern.test(e.target.value)) {
+                    e.target.style.borderColor = '#dc3545';
+                } else {
+                    e.target.style.borderColor = '#e1e5e9';
+                }
+            }
+        }, true);
+    </script>
+</body>
+</html>
