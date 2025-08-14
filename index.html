@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hackathon Team Registration</title>
+    <title>ERROR 404</title>
     <style>
         * {
             margin: 0;
@@ -228,7 +228,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>ERROR 404</h1>
+            <h1>Hackathon Team Registration</h1>
             <p>Join the ultimate coding challenge and showcase your innovation!</p>
         </div>
 
@@ -256,13 +256,11 @@
             </div>
 
             <form id="registrationForm">
-                <!-- Team Information -->
                 <div class="form-group">
                     <label for="teamName">🏆 Team Name *</label>
                     <input type="text" id="teamName" name="teamName" required placeholder="Enter your awesome team name">
                 </div>
 
-                <!-- Leader Information -->
                 <div class="member-section active">
                     <div class="member-header">
                         <div class="member-title">👑 Team Leader</div>
@@ -314,7 +312,6 @@
                     </div>
                 </div>
 
-                <!-- Member 2 -->
                 <div class="member-section" id="member2Section">
                     <div class="member-header">
                         <div class="member-title">👤 Member 2</div>
@@ -368,7 +365,6 @@
                     </div>
                 </div>
 
-                <!-- Member 3 (Hidden by default) -->
                 <div class="member-section" id="member3Section" style="display: none;">
                     <div class="member-header">
                         <div class="member-title">👤 Member 3</div>
@@ -421,7 +417,6 @@
                     </div>
                 </div>
 
-                <!-- Add Member Button -->
                 <div style="text-align: center; margin: 20px 0;" id="addMemberContainer">
                     <button type="button" class="add-member-btn" onclick="addMember()">+ Add Third Member</button>
                 </div>
@@ -433,20 +428,20 @@
         </div>
     </div>
 
-    <!-- Firebase SDKs -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-app-compat.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-database-compat.min.js"></script>
 
     <script>
         // Firebase Configuration
         const firebaseConfig = {
-            apiKey: "your-api-key-here",
-            authDomain: "your-project.firebaseapp.com",
-            databaseURL: "https://your-project-default-rtdb.firebaseio.com",
-            projectId: "your-project-id",
-            storageBucket: "your-project.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "your-app-id"
+        apiKey: "AIzaSyC293rbJspVxRheRyvlBMPiivw8UWNEkjQ",
+  authDomain: "messageapp-47727.firebaseapp.com",
+  databaseURL: "https://messageapp-47727-default-rtdb.firebaseio.com",
+  projectId: "messageapp-47727",
+  storageBucket: "messageapp-47727.appspot.com",
+  messagingSenderId: "121824970903",
+  appId: "1:121824970903:web:2b31ddb44e54f9d80741d2",
+  measurementId: "G-MZFT5YEK7S"
         };
 
         // Initialize Firebase
@@ -483,13 +478,12 @@
             if (memberNum === 2) {
                 // If removing member 2 and member 3 exists, move member 3 data to member 2
                 const member3Section = document.getElementById('member3Section');
-                const member2Section = document.getElementById('member2Section');
                 
                 if (member3Section.style.display !== 'none') {
                     // Copy member 3 data to member 2
                     document.getElementById('member2Name').value = document.getElementById('member3Name').value;
                     document.getElementById('member2Semester').value = document.getElementById('member3Semester').value;
-                    document.getElementById('member2Department').value = document.getElementById('member2Department').value;
+                    document.getElementById('member2Department').value = document.getElementById('member3Department').value;
                     document.getElementById('member2Email').value = document.getElementById('member3Email').value;
                     document.getElementById('member2Mobile').value = document.getElementById('member3Mobile').value;
                     
@@ -498,8 +492,11 @@
                     member3Section.style.display = 'none';
                     member3Section.classList.remove('active');
                     document.getElementById('addMemberContainer').style.display = 'block';
+                    memberCount = 2; // Reset member count as member 2 is now the last member
+                } else {
+                    // This case is unlikely due to the initial check, but for robustness
+                    alert('Team must have at least 2 members (including leader)');
                 }
-                memberCount = 2;
             } else if (memberNum === 3) {
                 clearMemberData(3);
                 const member3Section = document.getElementById('member3Section');
@@ -591,6 +588,13 @@
                 // Save to Firebase
                 await database.ref('teams/' + teamId).set(teamData);
                 
+                // Add the new team to the teamOrder list in Firebase
+                const teamOrderRef = database.ref('teamOrder');
+                const teamOrderSnapshot = await teamOrderRef.once('value');
+                const teamOrder = teamOrderSnapshot.val() || [];
+                teamOrder.push(teamId);
+                await teamOrderRef.set(teamOrder);
+
                 // Show success message
                 loading.style.display = 'none';
                 successMessage.style.display = 'block';
